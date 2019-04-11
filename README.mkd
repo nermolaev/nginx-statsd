@@ -44,7 +44,11 @@ This is how to use the nginx-statsd module:
 				# returned from the upstream server. If this value evaluates to 0 or empty-string,
 				# it will not be sent. Thus, there is no need to add a test.
 				statsd_timing "your_product.pages.index_response_time" "$upstream_response_time";
-
+				
+				# Sending metrics with nginx variables as additional tags
+				statsd_timing "your_product.response_time,status=$status,method=$request_method" "$upstream_response_time";
+				statsd_count "your_product.bytes,ip=$server_addr,status=$status,method=$request_method" "$body_bytes_sent" ;
+				
 				# Increment a key based on the value of a custom header. Only sends the value if
 				# the custom header exists in the upstream response.
 				statsd_count "your_product.custom_$upstream_http_x_some_custom_header" 1 
